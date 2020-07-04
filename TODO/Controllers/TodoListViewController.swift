@@ -10,10 +10,18 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
 
-    var items = ["Shopping", "Dinner"]
+    var items = [Item]()
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let newItem = Item()
+        newItem.title = "Dinner"
+        items.append(newItem)
+        if let itemArr = defaults.array(forKey: "TODOs") as? [Item] {
+            items = itemArr
+        }
     }
     
     //MARK - Tableview Datasource Methods
@@ -24,8 +32,11 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let item = items[indexPath.row]
         
-        cell.textLabel?.text = items[indexPath.row]
+        cell.textLabel?.text = item.title
+        
+        cell.accessoryType = item.done ? .checkmark : .none
         
         return cell
     }
@@ -34,13 +45,15 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        //check whether the cell has already been selected
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-        }else{
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        }
+        items[indexPath.row].done = !items[indexPath.row].done
         
+        //check whether the cell has already been selected
+//        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
+//            tableView.cellForRow(at: indexPath)?.accessoryType = .none
+//        }else{
+//            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+//        }
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true) //when a cell is selected, it flashes grey once 
     }
     
@@ -53,7 +66,12 @@ class TodoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             //what happens when the add button is pressed
-            self.items.append(textField.text!)
+            let newItem = Item()
+            newItem.title = textField.text!
+            self.items.append(newItem)
+            
+            self.defaults.set(self.items, forKey: "TODOs")
+            
             self.tableView.reloadData()
         }
         

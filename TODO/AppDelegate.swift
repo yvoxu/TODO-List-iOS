@@ -17,7 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        //when app is running in the background
+    }
 
+    func applicationWillTerminate(_ application: UIApplication) {
+        //when app is terminated completely
+    }
+    
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
