@@ -11,20 +11,16 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
     var items = [Item]()
-    let defaults = UserDefaults.standard
-    
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let newItem = Item()
-        newItem.title = "Dinner"
-        items.append(newItem)
-        if let itemArr = defaults.array(forKey: "TODOs") as? [Item] {
-            items = itemArr
-        }
+        loadItems()
     }
     
-    //MARK - Tableview Datasource Methods
+    
+    //MARK: - Tableview Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
@@ -41,23 +37,20 @@ class TodoListViewController: UITableViewController {
         return cell
     }
     
-    //MARK - Tableview Delegate Methods
+    
+    //MARK: - Tableview Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         items[indexPath.row].done = !items[indexPath.row].done
         
-        //check whether the cell has already been selected
-//        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-//            tableView.cellForRow(at: indexPath)?.accessoryType = .none
-//        }else{
-//            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-//        }
-        tableView.reloadData()
-        tableView.deselectRow(at: indexPath, animated: true) //when a cell is selected, it flashes grey once 
+        saveItems()
+        
+        tableView.deselectRow(at: indexPath, animated: true) //when a cell is selected, it flashes grey once
     }
     
-    //MARK - Add new items
+    
+    //MARK: - Add new items
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -68,11 +61,9 @@ class TodoListViewController: UITableViewController {
             //what happens when the add button is pressed
             let newItem = Item()
             newItem.title = textField.text!
+            
             self.items.append(newItem)
-            
-            self.defaults.set(self.items, forKey: "TODOs")
-            
-            self.tableView.reloadData()
+            self.saveItems()
         }
         
         alert.addTextField { (alertTextField) in
@@ -84,5 +75,29 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
+    //MARK: - Model Manupulation Methods
+    func saveItems() {
+        let encoder = PropertyListEncoder()
+        
+        do{
+            let data = try encoder.encode(items)
+            try data.write(to: dataFilePath!)
+        } catch {
+            print("Error encoding item array, \(error)")
+        }
+    }
+    
+    func loadItems() {
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                items = try decoder.decode([Item].self, from: data)
+            } catch {
+                print("Error decoding item array, \(error)")
+            }
+            
+        }
+    }
 }
 
