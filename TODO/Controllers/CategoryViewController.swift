@@ -36,6 +36,23 @@ class CategoryViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+                
+        if let categoryForDeletion = categories?[indexPath.row]{
+            
+            if editingStyle == .delete {
+                do {
+                    try realm.write {
+                        realm.delete(categoryForDeletion) // delete to do list by swiping and tapping
+                    }
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                } catch {
+                    print("Error with deleting the item. \(error)")
+                }
+            }
+        }
+    }
+    
     //MARK: - Tableview Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "goToItems", sender: self)
