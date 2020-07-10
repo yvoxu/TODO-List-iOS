@@ -29,7 +29,7 @@
                             <outlet property="delegate" destination="d4b-TB-8MK" id="cpO-DV-b1U"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="TODO" id="MHo-xZ-AhB">
+                    <navigationItem key="navigationItem" title="ToDo List" id="MHo-xZ-AhB">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="6w2-Jg-FtD">
                             <connections>
                                 <action selector="addButtonPressed:" destination="d4b-TB-8MK" id="oUR-xJ-jXD"/>
@@ -44,7 +44,7 @@
             </objects>
             <point key="canvasLocation" x="885" y="135"/>
         </scene>
-        <!--Items-->
+        <!--ToDo Items-->
         <scene sceneID="qvW-l5-BFo">
             <objects>
                 <tableViewController id="p8S-Li-zJS" customClass="TodoListViewController" customModule="TODO" customModuleProvider="target" sceneMemberID="viewController">
@@ -75,7 +75,7 @@
                             <outlet property="delegate" destination="p8S-Li-zJS" id="fdr-3Q-dra"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Items" id="ouU-pn-aWy">
+                    <navigationItem key="navigationItem" title="ToDo Items" id="ouU-pn-aWy">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="U0H-x7-M7Q">
                             <connections>
                                 <action selector="addButtonPressed:" destination="p8S-Li-zJS" id="05G-o5-m8M"/>
