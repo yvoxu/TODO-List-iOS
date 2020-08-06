@@ -2,7 +2,7 @@
 
 This is a ToDo List iOS app written in Swift. I used Realm to store data. 
 
-# Functionalities include: 
+# Functionalities: 
 - Add a to do list(category)/item
 ![add](https://github.com/yvoxu/TODO-List-iOS/blob/master/demo/add.png)
 
